@@ -18,3 +18,5 @@ Route::get('/', function () {
 });
 Route::post('ajax/register', 'ColaController@create')->name('register');
 Route::get('ajax/all', 'ColaController@getData')->name('allData');
+Route::get('ajax/deleone', 'ColaController@deleteOne')->name('DeleteOne');
+Route::get('ajax/deletetwo', 'ColaController@deleteTwo')->name('DeleteTwo');

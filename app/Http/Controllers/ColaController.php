@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Session;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 class ColaController extends Controller
 {
     /**
@@ -42,7 +43,45 @@ class ColaController extends Controller
     {
         $cola1 = Cola::where('tipo_cola', 1)->get();
         $cola2 = Cola::where('tipo_cola', 2)->get();
+        $fecha1 = new DateTime();
+        foreach($cola1 as $q){
+            $fecha2 = new DateTime($q->created_at);
+            $intervalo = $fecha1->diff($fecha2);
+            if($intervalo->format('%i') > 2){
+               $eliminar = Cola::where('id', $q->id)->first();
+               $eliminar->delete();
+            }
+        }
+        foreach($cola2 as $q2){
+            $fecha2 = new DateTime($q2->created_at);
+            $intervalo = $fecha1->diff($fecha2);
+            if($intervalo->format('%i') > 3){
+            $eliminar = Cola::where('id', $q2->id)->first();
+               $eliminar->delete();
+            }
+        }
+        $cola1 = Cola::where('tipo_cola', 1)->get();
+        $cola2 = Cola::where('tipo_cola', 2)->get();
         return response()->json(array('cola1' => $cola1, 'cola2' => $cola2), 200);
+    }
+    public function deleteOne()
+    {
+        $eliminar = Cola::where('tipo_cola', 1)->first();
+        if($eliminar != null){
+            $eliminar->delete();
+        }
+        $cola1 = Cola::where('tipo_cola', 1)->get();
+        return response()->json(array('cola1' => $cola1), 200);
+    }
+
+    public function deleteTwo()
+    {
+        $eliminar = Cola::where('tipo_cola', 2)->first();
+        if($eliminar != null){
+            $eliminar->delete();
+        }
+        $cola2 = Cola::where('tipo_cola', 2)->get();
+        return response()->json(array('cola2' => $cola2), 200);
     }
 
     /**

@@ -19,6 +19,10 @@
             width: 50%;
             margin: 0 auto;
         }
+        .error{
+          border: 1px solid red !important;
+          color: red !important;
+        }
     </style>
     <body>
         <form class="form-inline form-container">
@@ -86,6 +90,18 @@
         e.preventDefault();
         let id = $('#id').val()
         let nombre = $('#nombre').val();
+        if(id ==''){
+            $('#id').addClass('error');
+            return false;
+        }else{
+            $('#id').removeClass('error');
+        }
+        if(nombre ==''){
+            $('#nombre').addClass('error');
+            return false;
+        }else{
+            $('#nombre').removeClass('error');
+        }
         $.ajax({
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             type: 'post',
@@ -119,9 +135,47 @@
         });
     });
     setInterval(function(){
-        alert('hola');
-    }, 3000);
+        $.ajax({
+            type: 'get',
+            url: '{{ route('DeleteOne') }}',
+            dataType: 'json',
+            cache: false,
+            success: function (datas) {
+                $('.container-colauno ul').html('');
+                let r = datas.cola1.length > 0 ? datas.cola1 : [datas.cola1];
+                if(datas.cola1.length > 0){
+                    for (let i = 0; i < r.length; i++) {
+                        $('.container-colauno ul').append('<li>'+ r[i].cliente_id +'-'+r[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colauno ul').append('<li>Sin Clientes</li>');
+                }
+            },
+            error: function (datas) {
+                console.log('error');
+            }
+        });
+    }, 120000000);
     setInterval(function(){
-        alert('222222222222222');
-    }, 5000);
+        $.ajax({
+            type: 'get',
+            url: '{{ route('DeleteTwo') }}',
+            dataType: 'json',
+            cache: false,
+            success: function (datas) {
+                $('.container-colados ul').html('');
+                let r = datas.cola2.length > 0 ? datas.cola2 : [datas.cola2];
+                if(datas.cola2.length > 0){
+                    for (let i = 0; i < r.length; i++) {
+                        $('.container-colados ul').append('<li>'+ r[i].cliente_id +'-'+r[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colados ul').append('<li>Sin Clientes</li>');
+                }
+            },
+            error: function (datas) {
+                console.log('error');
+            }
+        });
+    }, 180000000);
 </script>

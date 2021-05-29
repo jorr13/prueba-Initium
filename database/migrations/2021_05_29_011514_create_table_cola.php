@@ -15,7 +15,7 @@ class CreateTableCola extends Migration
     {
         Schema::create('colas', function (Blueprint $table) {
             $table->unsignedInteger('id',45);
-            $table->integer('cliente_id');
+            $table->ipAddress('cliente_id');
             $table->string('nombre', 100);
             $table->integer('tipo_cola');
             $table->timestamps();
