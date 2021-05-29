@@ -35,14 +35,53 @@
                 </div>
                 <input type="text" class="form-control" id="nombre" placeholder="Ingrese el Nombre">
             </div>
+        
             <a href="javascript:void(0);" class="btn btn-primary mb-2" id="send">Guardar</a>
         </form>
+        <div class="container-colauno">
+            <h2>Cola 1</h2>
+            <ul></ul>
+        </div>
+        <div class="container-colados">
+            <h2>Cola 2</h2>
+            <ul></ul>
+        </div>
     </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script defer src="{{ asset('plugins') }}/bootstrap/js/bootstrap.min.js"></script>
 <script src="{{ asset('plugins') }}/sweetalerts/sweetalert2.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $.ajax({
+            type: 'get',
+            url: '{{ route('allData') }}',
+            dataType: 'json',
+            cache: false,
+            success: function (datas) {
+                let r = datas.cola1.length > 0 ? datas.cola1 : [datas.cola1];
+                let dos = datas.cola2.length > 0 ? datas.cola2 : [datas.cola2];
+                if(datas.cola1.length > 0){
+                    for (let i = 0; i < r.length; i++) {
+                        $('.container-colauno ul').append('<li>'+ r[i].cliente_id +'-'+r[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colauno ul').append('<li>Sin Clientes</li>');
+                }
+                if(datas.cola2.length > 0){
+                    for (let i = 0; i < dos.length; i++) {
+                        $('.container-colados ul').append('<li>'+ dos[i].cliente_id +'-'+dos[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colados ul').append('<li>Sin Clientes</li>');
+                }
+               
+            },
+            error: function (datas) {
+                console.log('error');
+            }
+        });
+    });
     $('#send').on('click', function (e) {
         e.preventDefault();
         let id = $('#id').val()
@@ -55,14 +94,34 @@
             dataType: 'json',
             cache: false,
             success: function (datas) {
-                console.log('0');
-            
+                $('.container-colauno ul').html('');
+                $('.container-colados ul').html('');
+                let r = datas.cola1.length > 0 ? datas.cola1 : [datas.cola1];
+                let dos = datas.cola2.length > 0 ? datas.cola2 : [datas.cola2];
+                if(datas.cola1.length > 0){
+                    for (let i = 0; i < r.length; i++) {
+                        $('.container-colauno ul').append('<li>'+ r[i].cliente_id +'-'+r[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colauno ul').append('<li>Sin Clientes</li>');
+                }
+                if(datas.cola2.length > 0){
+                    for (let i = 0; i < dos.length; i++) {
+                        $('.container-colados ul').append('<li>'+ dos[i].cliente_id +'-'+dos[i].nombre+'</li>');   
+                    }
+                }else{
+                    $('.container-colados ul').append('<li>Sin Clientes</li>');
+                }
             },
             error: function (datas) {
-                console.log('1');
+                console.log('error');
             }
-        }).done(function (data) {
-            console.log(data);
         });
     });
+    setInterval(function(){
+        alert('hola');
+    }, 3000);
+    setInterval(function(){
+        alert('222222222222222');
+    }, 5000);
 </script>

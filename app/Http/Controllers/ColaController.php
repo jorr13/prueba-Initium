@@ -26,13 +26,20 @@ class ColaController extends Controller
      */
     public function create(Request $request)
     {
-    ;
-        //dd($total->count());
         $cola = new Cola();
         $cola->cliente_id =  $request['id'];
         $cola->nombre = $request['nombre'];
         $cola->tipo_cola = 1;
+        $cola1 = Cola::where('tipo_cola', 1)->get()->count()*2;
+        $cola2 = Cola::where('tipo_cola', 2)->get()->count()*3;
+        $cola->tipo_cola = ($cola1 <= $cola2) ? 1 : 2;
         $cola->fill($request->all())->save();
+        $cola1 = Cola::where('tipo_cola', 1)->get();
+        $cola2 = Cola::where('tipo_cola', 2)->get();
+        return response()->json(array('cola1' => $cola1, 'cola2' => $cola2), 200);
+    }
+    public function getData()
+    {
         $cola1 = Cola::where('tipo_cola', 1)->get();
         $cola2 = Cola::where('tipo_cola', 2)->get();
         return response()->json(array('cola1' => $cola1, 'cola2' => $cola2), 200);
